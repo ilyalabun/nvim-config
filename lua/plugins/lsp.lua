@@ -21,16 +21,15 @@ return {
 					vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 				end
 
-				map("sr", vim.lsp.buf.rename, "[R]e[n]ame")
+				map("rn", vim.lsp.buf.rename, "[R]e[n]ame")
 				map("ga", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
-				-- WARN: This is Goto Declaration, not Goto Definition.
-				map("grD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+				map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+				map("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
 
 				-- Highlight references of the word under cursor on hold
 				local client = vim.lsp.get_client_by_id(event.data.client_id)
 				if client and client:supports_method("textDocument/documentHighlight", event.buf) then
-					local highlight_augroup =
-						vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+					local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
 					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 						buffer = event.buf,
 						group = highlight_augroup,
